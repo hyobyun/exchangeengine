@@ -1,3 +1,8 @@
+// Exchange Engine
+// Hyo Yul Byun 2015
+// Binary heap data structure used for keeping asks and bids in the order books
+// The comparator should be overridden unless you're sorting integers
+
 function BinaryHeap() {
 	this.content= [];
 	
