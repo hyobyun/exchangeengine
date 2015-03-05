@@ -1,9 +1,10 @@
 // Exchange Engine
 // Hyo Yul Byun 2015
-var Config = {
+var config = {};
 
-}
+// Default matching algorithm used
+config.defaultMatchAlgo = "ProRata";
 
 
 
-module.exports = Config;
+module.exports = config;
