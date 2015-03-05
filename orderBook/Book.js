@@ -22,21 +22,23 @@ Book.prototype = {
 		try {
 			var matchAlgoLoad = require("./matchingAlgos/"+matchAlgoName+".js");
 			this.bids.comparator = matchAlgoLoad.comparator;
-			this.asks.comparator = matchAlgoLoad.comparator;
+			this.asks.comparator = function(a,b) { return -1*matchAlgoLoad.comparator(a,b)};
 			console.log(this.bids.comparator);
 		} catch (ex) {
 			return new Error("Failed to load matching algorithm: " + ex);
 		}
 	},
-	addBid : function(order) {
-		this.asks.insert(order);
-	},
-	addAsk : function(order) {
-		this.bids.insert(order);
+	addOrder : function(order) {
+		if(order.side==='a') {
+			this.asks.insert(order);
+		} else if(order.side==='b') {
+			this.bids.insert(order);
+		}
+
 	},
 	removeOrder : function(order) {
 
-	}
+	},
 }
 
 module.exports = Book;

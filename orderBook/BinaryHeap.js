@@ -4,7 +4,7 @@
 // The comparator should be overridden unless you're sorting integers
 
 function BinaryHeap() {
-	this.content = [];
+	this.content = new Array();
 
 	//This should be overridden depending on use
 	this.comparator = function(a,b) {
