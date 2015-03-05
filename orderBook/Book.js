@@ -20,17 +20,19 @@ function Book() {
 Book.prototype = {
 	setMatchAlgo : function(matchAlgoName) {
 		try {
-			var MatchAlgo = require("./matchingAlgos/"+config.defaultMatchAlgo+".js");
-			// do stuff
+			var matchAlgoLoad = require("./matchingAlgos/"+matchAlgoName+".js");
+			this.bids.comparator = matchAlgoLoad.comparator;
+			this.asks.comparator = matchAlgoLoad.comparator;
+			console.log(this.bids.comparator);
 		} catch (ex) {
-			return new Error("Failed to load matching algorithm: " + matchAlgoName);
+			return new Error("Failed to load matching algorithm: " + ex);
 		}
 	},
 	addBid : function(order) {
-
+		this.asks.insert(order);
 	},
 	addAsk : function(order) {
-
+		this.bids.insert(order);
 	},
 	removeOrder : function(order) {
 

@@ -4,10 +4,10 @@
 function Order() {
 	this.ownerID = null;
 	this.assetID = null;
-	this.time = null;
+	this.orderTime = null;
 	this.orderType = null;
 	this.price = null;
 	this.quantity = null;
-	this.status = null;
-}
+	this.orderStatus = null;
+};
 module.exports = Order;
