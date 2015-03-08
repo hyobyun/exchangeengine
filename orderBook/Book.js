@@ -36,9 +36,27 @@ Book.prototype = {
 		}
 
 	},
+
 	removeOrder : function(order) {
 
 	},
+
+	matchOrder : function(agroOrder) {
+		//Resting orders
+		var rests = {};
+
+		//Determine side of aggressor and set rests approporiately
+		if (aggressor.side=='a') {
+			rests = this.bids;
+		} else if (aggressor.side=='b') {
+			rests = this.bids;
+		} else {
+			return new Error("Aggressor order is not 'a' or 'b'");
+		}
+
+		return this.matchAlgo.matchOrder(agroOrder,rests);
+
+	}
 }
 
 module.exports = Book;

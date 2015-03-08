@@ -60,7 +60,10 @@ BinaryHeap.prototype = {
 
 		}
 	},
-	length:function() {
+	peek : function() {
+		return this.content[0];
+	},
+	length : function() {
 		return this.content.length;
 	}
 }
