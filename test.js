@@ -12,7 +12,7 @@ for(var i=0;i<50;i++) {
   tmpOrder.price = Math.floor(Math.random()*10);
   tmpOrder.orderTime = new Date();
   tmpOrder.id=i;
-  tmpOrder.quantity = Math.floor(Math.random()*100);
+  tmpOrder.quantity = Math.floor(Math.random()*100+1);
   if(Math.random()>=0.5)
     tmpOrder.side = 'a';
   else

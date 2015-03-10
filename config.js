@@ -5,6 +5,7 @@ var config = {};
 // Default matching algorithm used
 config.defaultMatchAlgo = "ProRata";
 
+config.deciAccuracy = 0.01;
 
 
 module.exports = config;
