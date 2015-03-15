@@ -7,7 +7,8 @@ console.log('Exchange Engine Start');
 var testBook = new Book();
 
 //Generate random orders
-for(var i=0;i<50;i++) {
+for(var i=0;i<100;i++) {
+  console.log("-------------------------");
   var tmpOrder = new Order();
   tmpOrder.price = Math.floor(Math.random()*10);
   tmpOrder.orderTime = new Date();
@@ -18,25 +19,34 @@ for(var i=0;i<50;i++) {
   else
     tmpOrder.side = 'b';
 
+
+
+  console.log("Add SIDE:" +tmpOrder.side);
+  console.log("Add Price:" +tmpOrder.price);
+  console.log("      ");
   testBook.addOrder(tmpOrder);
-  //console.log("  add " +tmpOrder.orderTime);
+
+
+
+
   //Shit way to randomly delay
-  for(var j=0;j<Math.random()*10000000000 ; j++)
+  for(var j=0;j<Math.random()*1000000000000 ; j++)
     1000000/j/j/j/j/j/j/j;
 
+
 }
 
 
-console.log("-------BIDS------"+testBook.bids.length());
-console.log("price   | s ms   |  quantity")
-for(var i=0;0<testBook.bids.length();i++) {
-  var orderTmp=testBook.bids.pop();
-  console.log(orderTmp.price + "       | " +orderTmp.orderTime.getSeconds() + " " + orderTmp.orderTime.getMilliseconds()+ " | " +orderTmp.quantity);
-}
+  console.log("-------BIDS------"+testBook.bids.length());
+  console.log("price   | s ms   |  quantity")
+  for(var j=0;0<testBook.bids.length();j++) {
+    var orderTmp=testBook.bids.pop();
+    console.log(orderTmp.price + "       | " +orderTmp.orderTime.getSeconds() + " " + orderTmp.orderTime.getMilliseconds()+ " | " +orderTmp.quantity);
+  }
 
-console.log("-------ASKS------"+ testBook.asks.length());
-console.log("price   | s ms   | quantity")
-for(var i=0;0<testBook.asks.length();i++) {
-  var orderTmp=testBook.asks.pop();
-  console.log(orderTmp.price + "       | " +orderTmp.orderTime.getSeconds() + " " + orderTmp.orderTime.getMilliseconds() + " | " +orderTmp.quantity);
-}
+  console.log("-------ASKS------"+ testBook.asks.length());
+  console.log("price   | s ms   | quantity")
+  for(var j=0;0<testBook.asks.length();j++) {
+    var orderTmp=testBook.asks.pop();
+    console.log(orderTmp.price + "       | " +orderTmp.orderTime.getSeconds() + " " + orderTmp.orderTime.getMilliseconds() + " | " +orderTmp.quantity);
+  }

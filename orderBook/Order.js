@@ -7,7 +7,7 @@ function Order() {
 	this.assetID = null;
 	this.side = null;			//'a' or 'b'
 	this.orderTime = null;
-	this.orderType = null;
+	this.orderRules = [];
 	this.price = null;
 	this.quantity = null;
 	this.orderStatus = null;

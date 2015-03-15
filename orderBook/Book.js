@@ -1,6 +1,11 @@
 // Exchange Engine
 // Hyo Yul Byun 2015
 
+
+// ask sellers asking for
+
+// Bid - buyers bidding
+
 var BinaryHeap = require('./BinaryHeap.js');
 var config = require('../config.js');
 
@@ -55,12 +60,18 @@ Book.prototype = {
 		if (agroOrder.side=='a') {
 			rests = this.bids;
 		} else if (agroOrder.side=='b') {
-			rests = this.bids;
+			rests = this.asks;
 		} else {
 			return new Error("Aggressor order is not 'a' or 'b'");
 		}
-		return this.matchAlgo.matchOrder(agroOrder,rests);
 
+
+	//	if (rests.peek() == null) {
+			//return null;
+	//	} else {
+			console.log("Rest Side: "  + (rests.peek() == null ? "N/A" : rests.peek().side));
+			return this.matchAlgo.matchOrder(agroOrder,rests);
+		//}
 	}
 }
 
