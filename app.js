@@ -3,9 +3,8 @@ var redis= require('./redisClient.js');
 
 var ee = {};
 
-//callback(err,res)
-ee.getNewBookID = function(callback) {
-  redis.incr('bookID',callback);
-}
+Book.getNewBookID(function(err,res) {
+  console.log(res);
+});
 
 module.exports=ee;

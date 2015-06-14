@@ -18,6 +18,7 @@
   "homepage": "https://github.com/hyobyun/exchangeengine",
   "dependencies": {
     "chai": "^3.0.0",
-    "redis": "^0.12.1"
+    "redis": "^0.12.1",
+    "winston": "^1.0.0"
   }
 }

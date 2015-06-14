@@ -29,4 +29,15 @@ describe('Book', function(){
         new Book(new Book(1));
       });
     });
+
+    it('getNewBookID(callback) Should find new bookID', function(){
+      Book.getNewBookID(function(err,res) {
+        assert.isNumber(res);
+      });
+    });
+    it('Should default to ProRata', function(){
+      var book=new Book(0);
+      assert.equal(book.matchAlgo.name,'ProRata');
+    });
+
 })

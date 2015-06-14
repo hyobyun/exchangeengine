@@ -4,7 +4,7 @@ var config = {};
 
 // Default matching algorithm used
 config.defaultMatchAlgo = "ProRata";
-
+config.orderTypes = ['limit','market'];
 config.deciAccuracy = 0.01;
 
 

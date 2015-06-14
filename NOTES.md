@@ -21,3 +21,20 @@ bookID_bid
 ----------
 score   : price
 contains orderIDs
+
+
+--------------------------------------------------------------------------------
+
+orderTypes
+-agroWouldTradeSet(agroOrder, idleOrdersSet) : returns set of orders that it would trade with
+
+
+matchingAlgos
+-executeTrades(agroOrder) {           : returns executedOrders, new/partialOrders
+  agroOrder's agroWouldTradeSet
+  ....
+}
+
+
+
+----------------------------------------------------------------

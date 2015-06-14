@@ -5,6 +5,7 @@ var config = require('../../config.js');
 
 
 module.exports = {
+  name: 'ProRata',
   comparator : function(a, b) {
     if(b.price > a.price) {
       return 1;
@@ -18,7 +19,7 @@ module.exports = {
       return -1;
     }
 
-    return 0
+    return 0;
   },
 
   // b ------- a
