@@ -17,8 +17,13 @@
   },
   "homepage": "https://github.com/hyobyun/exchangeengine",
   "dependencies": {
+    "body-parser": "^1.14.1",
     "chai": "^3.0.0",
-    "redis": "^0.12.1",
+    "cookie-parser": "^1.4.0",
+    "express": "^4.13.3",
+    "express-session": "^1.11.3",
+    "mongoose": "^4.1.10",
+    "passport": "^0.3.0",
     "winston": "^1.0.0"
   }
 }

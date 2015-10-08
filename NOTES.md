@@ -1,5 +1,11 @@
 
+Side:
+SELL: 0
+BUY : 1
 
+TYPE:
+LIMIT : 1
+MARKET :2
 
 
 Orders  = HashSet
@@ -25,11 +31,18 @@ contains orderIDs
 
 --------------------------------------------------------------------------------
 
+
+Book
+-addOrder(agroOrder)
+  -orderTradeSet=orderTypes.getOrderTradeSet(agroOrder,bookID);
+  -tradeSet=getAlgoTradeSet(orderTradeSet);
+  -executeTrades(orderType.executeTrades(tradeSet));
+
+
 orderTypes
--agroWouldTradeSet(agroOrder, idleOrdersSet) : returns set of orders that it would trade with
+-getTradeSet(agroOrder,bookID) -> idleOrderTradeSet
 
 
-matchingAlgos
 -executeTrades(agroOrder) {           : returns executedOrders, new/partialOrders
   agroOrder's agroWouldTradeSet
   ....
@@ -38,3 +51,6 @@ matchingAlgos
 
 
 ----------------------------------------------------------------
+
+
+orderType- returns
