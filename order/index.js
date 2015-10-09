@@ -2,29 +2,29 @@ var express = require('express');
 var log = require('winston');
 var router = express.Router();
 
-
+var match = require('../match.js');
 var Book = require('../models/Book.js');
-var Trade = require('../models/Trade.js');
+var Order = require('../models/Order.js');
 
 /* TODO: Split this up */
 
 /* Get book listing */
 router.get('/',function(req,res) {
-    Trade.find({},function(err,trades) {
+    Order.find({},function(err,orders) {
          if (err) {
-             log.error("Could not query trades");
+             log.error("Could not query orders");
              res.status(500);
-             res.json({error: "Could not query trades"});
+             res.json({error: "Could not query orders"});
              log.error(err);
          } else {
-             log.info('GET /trades 200');
-             res.json(trades);
+             log.info('GET /orders 200');
+             res.json(orders);
          }
 
     });
 });
 
-/* Create new trade */
+/* Create new order */
 router.post('/', function (req,res) {
 
         var book             = req.body.book;
@@ -32,23 +32,25 @@ router.post('/', function (req,res) {
         var side             = Boolean(req.body.side);
         var type             = Number(req.body.type);
 
-        var newTrade = new Trade({
+        var newOrder = new Order({
                 book:book,
                 price:price,
                 side:side,
                 type:type
               });
 
-       newTrade.save(function (err, newTrade) {
+       newOrder.save(function (err, newOrder) {
             if (err) {
-                log.error("Could not create Trade");
+                log.error("Could not create order");
                 res.status(500);
-                res.json({error: "Error has occured during trade creation."});
+                res.json({error: "Error has occured during order creation."});
                 log.error(err);
             } else {
-                log.info('POST /trade 200 : ' + newTrade);
+                log.info('POST /order 200 : ' + newOrder);
                 res.status(200);
                 res.end();
+
+                match(book._id, newOrder);
             }
           });
 

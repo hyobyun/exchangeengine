@@ -1,10 +1,10 @@
 
 
 var book = require('./book');
-var trade = require('./trade');
+var order = require('./order');
 
 
 module.exports= function(app) {
     app.use('/book', book);
-        app.use('/trade', trade);
+        app.use('/order', order);
 }
