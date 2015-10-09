@@ -1,3 +1,4 @@
+var MATCHALGOS = require('./constants/matchAlgos.js');
 var config = {};
 
 config.mongo= {
@@ -8,7 +9,7 @@ config.mongo= {
 
 config.sessionSecret='changeme';
 // Default matching algorithm used
-config.defaultMatchAlgo = 1; // 1:ProRata
+config.defaultMatchAlgo = MATCHALGOS.FIFO;
 config.orderTypes = ['limit','market'];
 config.deciAccuracy = 0.01;
 

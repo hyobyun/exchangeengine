@@ -17,7 +17,6 @@ var match = function(bookID, aggroOrder) {
 
 
 var limitMatch = function(bookID, aggroOrder) {
-
     /* If the aggro Order is selling look for prices greater than, else less than. */
     var priceSelector = {};
     priceSelector[ aggroOrder.side ? '$lte' : '$gte' ] = aggroOrder.price;
@@ -27,28 +26,31 @@ var limitMatch = function(bookID, aggroOrder) {
     var findRestPrice = Order.findOne({
             side: !aggroOrder.side,
             price: priceSelector,
-            book: aggroOrder.book
+            book: aggroOrder.book,
+            status: 1
         }).
         sort({ price: sortOrder });
 
-    findRestPrice.exec(function(err,res) {
+    findRestPrice.exec(function(err,restOrder) {
         log.info("Price find for aggro order : " + aggroOrder._id);
-        if (res) {
+        if (restOrder) {
+            /* There are valid trades to execute */
+            var bestPrice = restOrder.price;
+            var findRestOrders = Order.find({
+                    side: !aggroOrder.side,
+                    price: priceSelector,
+                    book: aggroOrder.book,
+                }).
+                sort({ 'time':1});
+
+            findRestOrders.exec(function(err,restOrders) {
+                console.log(restOrders);
+            });
 
         } else {
             log.info("No Approporiate matching resting orders for aggro order: " + aggroOrder._id)
         }
-        console.log(res);
-    })
-    /*
-    Trade.find({
-        side: !aggroOrder.type,
-        price: priceSelector
-    }).
-    limit(10).
-    sort({ price: sortOrder }).
-    exec(callback);
-    */
+    });
 }
 
 var marketMatch = function(bookID, aggroOrder) {

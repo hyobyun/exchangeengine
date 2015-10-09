@@ -1,4 +1,4 @@
 module.exports = Object.freeze({
-    ACTIVE:1,
+    FIFO:1,
     PRORATA :2
 });

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/hyobyun/exchangeengine",
   "dependencies": {
+    "async": "^1.4.2",
     "body-parser": "^1.14.1",
     "chai": "^3.0.0",
     "cookie-parser": "^1.4.0",

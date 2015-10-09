@@ -31,12 +31,14 @@ router.post('/', function (req,res) {
         var price            = Number(req.body.price);
         var side             = Boolean(req.body.side);
         var type             = Number(req.body.type);
+        var quantity         = Number(req.body.quantity);
 
         var newOrder = new Order({
                 book:book,
                 price:price,
                 side:side,
-                type:type
+                type:type,
+                quantity:quantity
               });
 
        newOrder.save(function (err, newOrder) {

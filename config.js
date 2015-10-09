@@ -1,3 +1,4 @@
+var MATCHALGOS = require('./constants/matchAlgos.js');
 var config = {};
 
 config.mongo= {
@@ -6,6 +7,7 @@ config.mongo= {
     pass: 'zoomass4',
 }
 config.sessionSecret='changeme';
+config.defaultMatchAlgo = MATCHALGOS.FIFO;
 // Default matching algorithm used
 config.defaultMatchAlgo = 1; // 1:ProRata
 config.orderTypes = ['limit','market'];
