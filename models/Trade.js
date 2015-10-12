@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 
 var tradeSchema = new mongoose.Schema({
-    buyOrder    : { type: mongoose.Schema.Types.ObjectId, ref: 'Book' },
-    sellOrder    : { type: mongoose.Schema.Types.ObjectId, ref: 'Book' },
+    buyOrder    : { type: mongoose.Schema.Types.ObjectId, ref: 'Order' },
+    sellOrder    : { type: mongoose.Schema.Types.ObjectId, ref: 'Order' },
     time: { type: Date, default: Date.now }
 });
 
