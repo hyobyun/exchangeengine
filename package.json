@@ -17,16 +17,8 @@
   },
   "homepage": "https://github.com/hyobyun/exchangeengine",
   "dependencies": {
-    "async": "^1.4.2",
-    "body-parser": "^1.14.1",
-    "chai": "^3.0.0",
-    "cookie-parser": "^1.4.0",
-    "express": "^4.13.3",
-    "express-session": "^1.11.3",
-    "mongoose": "^4.1.10",
-    "mongoose-mock": "^0.4.0",
-    "passport": "^0.3.0",
-    "proxyquire": "^1.7.4",
+    "async": "2.4.0",
+    "chai": "3.5.0 ",
     "winston": "^1.0.0"
   }
 }
