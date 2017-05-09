@@ -1,28 +1,100 @@
 var assert = require('chai').assert;
-var matchAlgos = require("../../constants/matchAlgos");
+var async = require('async');
+
+
+var Book = require('../../Book.js');
+var Order = require('../../Order.js');
+
 describe('Book', function(){
 
     it('Can create a new book with name', function() {
         var bookName= "testBook";
-
-        var Book = require('../../models/Book.js');
-        var test = new Book({name: bookName});
+        var test = new Book(bookName);
         assert.equal(test.name,bookName);
     });
 
-    it('New Book default match algo is FIFO', function() {
-        var Book = require('../../models/Book.js');
-        var test = new Book({name: "testBook"});
-        assert.equal(test.matchAlgo.length,1);
-        assert.equal(test.matchAlgo[0],1)
+    it('Starts with zero length bid book', function() {
+        var test = new Book("testBook");
+        assert.equal(test.bids.length,0);
     });
 
-    it('New Book default allowed groups is 0', function() {
-        var Book = require('../../models/Book.js');
-        var test = new Book({name: "testBook"});
-        assert.equal(test.allowedGroups.length,1);
-        assert.equal(test.allowedGroups[0],0)
+    it('Starts with zero length ask book', function() {
+        var test = new Book("testBook");
+        assert.equal(test.asks.length,0);
     });
 
+
+
+
+    it('bid order sorting is correct (pricing)', function(done) {
+        var book = new Book("testBook");
+        var o1= {
+          quantity: 1,
+          price: 1,
+          side: Order.SIDE.BID,
+          owner: "whome",
+          status: Order.STATUS.ACTIVE,
+          time: new Date()
+        }
+        var o2= {
+          quantity: 1,
+          price: 2,
+          side: Order.SIDE.BID,
+          owner: "whome",
+          status: Order.STATUS.ACTIVE,
+          time: new Date()
+        }
+
+        async.series([
+          function(cb) {
+            book.addOrder(o1,cb);
+          },
+          function(cb) {
+            book.addOrder(o2,cb);
+          }
+        ],
+        function(err, results) {
+          assert.equal(book.bids[0].price,2);
+          assert.equal(book.bids[1].price,1);
+          done();
+        });
+
+
+    });
+
+    it('ask order sorting is correct (pricing)', function(done) {
+        var book = new Book("testBook");
+        var o1= {
+          quantity: 1,
+          price: 2,
+          side: Order.SIDE.ASK,
+          owner: "whome",
+          status: Order.STATUS.ACTIVE,
+          time: new Date()
+        }
+        var o2= {
+          quantity: 1,
+          price: 1,
+          side: Order.SIDE.ASK,
+          owner: "whome",
+          status: Order.STATUS.ACTIVE,
+          time: new Date()
+        }
+
+        async.series([
+          function(cb) {
+            book.addOrder(o1,cb);
+          },
+          function(cb) {
+            book.addOrder(o2,cb);
+          }
+        ],
+        function(err, results) {
+          assert.equal(book.asks[0].price,1);
+          assert.equal(book.asks[1].price,2);
+          done();
+        });
+
+    });
 
 })
