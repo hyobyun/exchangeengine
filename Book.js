@@ -18,9 +18,9 @@ function Book(name) {
       job(callback);
   }, 1);
 
-  this.addOrder = function(order,callback) {
+  this.addOrder = function(order,cbAddOrder) {
     var _this=this;
-    var action = function(cb) {
+    var action = function(cbJob) {
       if (order.side===Order.SIDE.BID) {
         _this.bids.push(order);
         sortBids();
@@ -28,8 +28,8 @@ function Book(name) {
         _this.asks.push(order);
         sortAsks();
       }
-      cb();
-      callback();
+      cbJob();
+      cbAddOrder();
     }
     jobsQueue.push(action);
   }
@@ -37,7 +37,6 @@ function Book(name) {
 
 
   //Privates
-
   var sortBids = function() {
      var bidComparator = function(a,b) {
        var ret = b.price-a.price;
