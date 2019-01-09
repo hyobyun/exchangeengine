@@ -1,9 +1,10 @@
-var mongoose = require('mongoose');
+function Trade( price, quantity,newOrders, childOrders, time) {
+  // TODO: VALIDATION
+  this.fillPrice = price;
+  this.fillQuantity = quantity;
+  this.newOrders = newOrders;
+  this.childOrders = childOrders;
+  this.executionTime = time;
+}
 
-var tradeSchema = new mongoose.Schema({
-    buyOrder    : { type: mongoose.Schema.Types.ObjectId, ref: 'Order' },
-    sellOrder    : { type: mongoose.Schema.Types.ObjectId, ref: 'Order' },
-    time: { type: Date, default: Date.now }
-});
-
-module.exports = mongoose.model('Trade', tradeSchema);
+module.exports = Trade;
