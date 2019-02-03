@@ -1,6 +1,6 @@
 {
   "name": "exchangeengine",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A market exchange engine with order matching.",
   "main": "index.js",
   "scripts": {
@@ -11,15 +11,15 @@
     "url": "https://github.com/hyobyun/exchangeengine.git"
   },
   "author": "Hyo Yul Byun",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/hyobyun/exchangeengine/issues"
   },
   "homepage": "https://github.com/hyobyun/exchangeengine",
   "dependencies": {
-    "async": "2.4.0",
+    "async": "^2.6.1",
     "chai": "4.2.0",
-    "winston": "^1.0.0"
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "nyc": "^13.1.0"
