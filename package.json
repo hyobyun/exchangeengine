@@ -18,7 +18,7 @@
   "homepage": "https://github.com/hyobyun/exchangeengine",
   "dependencies": {
     "async": "2.4.0",
-    "chai": "3.5.0 ",
+    "chai": "4.2.0",
     "winston": "^1.0.0"
   }
 }

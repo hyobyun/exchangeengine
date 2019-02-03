@@ -1,3 +1,3 @@
-module.exports = function(number, locale) {
-    return number.toLocaleString(locale);
-};
+var Book = require('./Book.js');
+
+exports.Book = Book;
