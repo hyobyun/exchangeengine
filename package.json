@@ -4,7 +4,7 @@
   "description": "A market exchange engine with order matching.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "nyc --reporter=html --reporter=text mocha"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,8 @@
     "async": "2.4.0",
     "chai": "4.2.0",
     "winston": "^1.0.0"
+  },
+  "devDependencies": {
+    "nyc": "^13.1.0"
   }
 }
