@@ -93,7 +93,7 @@ function Book(name) {
               _this.addOrder(newOrder);
             }
             if (Math.abs(newerLimOrder.quantity - fillQuantity) > config.deciAccuracy) {
-              let newOrder = Object.assign({}, posLiqOrder);
+              let newOrder = Object.assign({}, newerLimOrder);
               newOrder.quantity = newerLimOrder.quantity - fillQuantity;
               newOrders.push(newOrder);
               _this.addOrder(newOrder);
