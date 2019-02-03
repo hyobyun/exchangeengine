@@ -4,8 +4,8 @@
   "description": "A market exchange engine with order matching.",
   "main": "index.js",
   "scripts": {
-    "coverage": "nyc --reporter=html --reporter=text mocha",
-    "test": "./node_modules/.bin/mocha"
+     "coverage": "./node_modules/.bin/nyc report --reporter=text-lcov | coveralls",
+    "test": "./node_modules/.bin/nyc --reporter=html --reporter=text ./node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,8 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "nyc": "^13.1.0",
-    "mocha": "^5.2.0"
+    "coveralls": "^3.0.2",
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0"
   }
 }
