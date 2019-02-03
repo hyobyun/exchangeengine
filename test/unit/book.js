@@ -685,9 +685,6 @@ describe('Book Matching', function() {
       assert.equal(trades[0].fillQuantity, 3);
       assert.equal(trades[0].fillPrice, 5);
 
-      console.log(book.asks);
-      console.log(book.bids);
-      console.log(trades);
       assert.equal(book.asks.length, 1);
       assert.equal(book.asks[0].quantity, 7);
       assert.equal(book.bids.length, 0);

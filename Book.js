@@ -75,30 +75,23 @@ function Book(name) {
         } else {
           // Both are limits
           if (this.getSpread() < (config.deciAccuracy - config.deciAccuracy / 2)) {
-            var olderLimOrder = null;
-            var newerLimOrder = null;
-            if (_this.asks[0].time < _this.bids[0].time) {
-              olderLimOrder = _this.asks.shift();
-              newerLimOrder = _this.bids.shift();
-            } else {
-              olderLimOrder = _this.bids.shift();
-              newerLimOrder = _this.asks.shift();
-            }
+            var askLimOrder = _this.asks.shift();
+            var bidLimOrder =_this.bids.shift();
             var newOrders = [];
-            var fillQuantity = Math.min(olderLimOrder.quantity, newerLimOrder.quantity);
-            if (Math.abs(olderLimOrder.quantity - fillQuantity) > config.deciAccuracy) {
-              let newOrder = Object.assign({}, olderLimOrder);
-              newOrder.quantity = olderLimOrder.quantity - fillQuantity;
+            var fillQuantity = Math.min(askLimOrder.quantity, bidLimOrder.quantity);
+            if (Math.abs(askLimOrder.quantity - fillQuantity) > config.deciAccuracy) {
+              let newOrder = Object.assign({}, askLimOrder);
+              newOrder.quantity = askLimOrder.quantity - fillQuantity;
               newOrders.push(newOrder);
               _this.addOrder(newOrder);
             }
-            if (Math.abs(newerLimOrder.quantity - fillQuantity) > config.deciAccuracy) {
-              let newOrder = Object.assign({}, newerLimOrder);
-              newOrder.quantity = newerLimOrder.quantity - fillQuantity;
+            if (Math.abs(bidLimOrder.quantity - fillQuantity) > config.deciAccuracy) {
+              let newOrder = Object.assign({}, bidLimOrder);
+              newOrder.quantity = bidLimOrder.quantity - fillQuantity;
               newOrders.push(newOrder);
               _this.addOrder(newOrder);
             }
-            trades.push(new Trade(olderLimOrder.price, fillQuantity, newOrders, [newerLimOrder, olderLimOrder], new Date()));
+            trades.push(new Trade(askLimOrder.price, fillQuantity, newOrders, [bidLimOrder, askLimOrder], new Date()));
             // Add order to bookID
             tradeExecuted = true;
             continue;
