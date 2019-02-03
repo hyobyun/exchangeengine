@@ -23,6 +23,7 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "nyc": "^13.1.0"
+    "nyc": "^13.1.0",
+    "mocha": "^5.2.0"
   }
 }
