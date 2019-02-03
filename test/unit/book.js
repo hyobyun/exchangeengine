@@ -290,7 +290,7 @@ describe('Book Matching', function() {
 
   });
 
-  it('Limit & Market order, larger market', function(done) {
+  it('Limit & Market order, larger market , sitting asks', function(done) {
     var book = new Book("testBook");
     var o1 = {
       quantity: 1,
@@ -338,6 +338,53 @@ describe('Book Matching', function() {
   });
 
 
+    it('Limit & Market order, larger market , sitting bids', function(done) {
+      var book = new Book("testBook");
+      var o1 = {
+        quantity: 1,
+        price: 3,
+        side: Order.SIDE.BID,
+        type: OrderTypes.LIMIT,
+        owner: "whome",
+        status: Order.STATUS.ACTIVE,
+        time: new Date()
+      }
+
+      var o2 = {
+        quantity: 1,
+        price: 4,
+        side: Order.SIDE.BID,
+        type: OrderTypes.LIMIT,
+        owner: "whome",
+        status: Order.STATUS.ACTIVE,
+        time: new Date()
+      }
+
+      var o3 = {
+        quantity: 3,
+        price: null,
+        side: Order.SIDE.ASK,
+        type: OrderTypes.MARKET,
+        owner: "whome",
+        status: Order.STATUS.ACTIVE,
+        time: new Date()
+      }
+      book.addOrder(o1);
+      book.addOrder(o2);
+      book.addOrder(o3);
+      var trades = book.settleBook();
+      assert.equal(trades.length, 2);
+      assert.equal(trades[0].childOrders.length, 2);
+      assert.equal(trades[1].childOrders.length, 2);
+      assert.equal(trades[0].newOrders.length, 1);
+      assert.equal(book.asks.length, 1);
+      assert.equal(book.asks[0].quantity, 1);
+      assert.equal(book.bids.length, 0);
+      done();
+
+
+    });
+
 
   it('Limit & Limit order, no deal', function(done) {
     var book = new Book("testBook");
@@ -363,9 +410,6 @@ describe('Book Matching', function() {
     book.addOrder(o1);
     book.addOrder(o2);
     var trades = book.settleBook();
-    //console.log(trades);
-    //console.log(book.asks);
-    //console.log(book.bids);
     assert.equal(trades.length, 0);
     assert.equal(book.bids.length, 1);
     assert.equal(book.asks.length, 1);
