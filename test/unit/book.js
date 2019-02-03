@@ -120,7 +120,7 @@ describe('Book', function() {
 describe('Book Matching', function() {
 
 
-  it('One Limit order should not settle with any trades', function(done) {
+  it('One Limit order should not settle with any trades - ask', function(done) {
     var book = new Book("testBook");
     var o1 = {
       quantity: 1,
@@ -141,6 +141,28 @@ describe('Book Matching', function() {
 
   });
 
+  it('One Limit order should not settle with any trades - bid', function(done) {
+    var book = new Book("testBook");
+    var o1 = {
+      quantity: 1,
+      price: 2,
+      side: Order.SIDE.BID,
+      type: OrderTypes.LIMIT,
+      owner: "whome",
+      status: Order.STATUS.ACTIVE,
+      time: new Date()
+    }
+    book.addOrder(o1);
+    var trades = book.settleBook();
+
+    assert.equal(trades.length, 0);
+    assert.equal(book.bids[0].price, 2);
+    done();
+
+
+  });
+
+  // This is sort of dangerous- maybe we should reject trade?
   it('One Market order should not settle with any trades', function(done) {
     var book = new Book("testBook");
     var o1 = {
@@ -162,7 +184,7 @@ describe('Book Matching', function() {
 
   });
 
-  it('Limit & Market order, same quantity ', function(done) {
+  it('Limit & Market order, same quantity ask first', function(done) {
     var book = new Book("testBook");
     var o1 = {
       quantity: 1,
@@ -194,6 +216,42 @@ describe('Book Matching', function() {
 
 
   });
+
+
+    it('Limit & Market order, same quantity bid first', function(done) {
+      var book = new Book("testBook");
+      var o1 = {
+        quantity: 1,
+        price: 3,
+        side: Order.SIDE.BID,
+        type: OrderTypes.LIMIT,
+        owner: "whome",
+        status: Order.STATUS.ACTIVE,
+        time: new Date()
+      }
+
+      var o2 = {
+        quantity: 1,
+        price: null,
+        side: Order.SIDE.ASK,
+        type: OrderTypes.MARKET,
+        owner: "whome",
+        status: Order.STATUS.ACTIVE,
+        time: new Date()
+      }
+      book.addOrder(o1);
+      book.addOrder(o2);
+      var trades = book.settleBook();
+      assert.equal(trades.length, 1);
+      assert.equal(trades[0].childOrders.length, 2);
+      assert.equal(book.asks.length, 0);
+      assert.equal(book.bids.length, 0);
+      done();
+
+
+    });
+
+
   it('Limit & Market order, larger ask/limit', function(done) {
     var book = new Book("testBook");
     var o1 = {
