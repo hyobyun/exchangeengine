@@ -177,8 +177,7 @@ describe('Book Matching', function() {
 
   });
 
-  // This is sort of dangerous- maybe we should reject trade?
-  it('One Market order should not settle with any trades', function(done) {
+  it('One Market order should be rejected - ask', function(done) {
     var book = new Book("testBook");
     var o1 = {
       quantity: 1,
@@ -189,17 +188,42 @@ describe('Book Matching', function() {
       status: Order.STATUS.ACTIVE,
       time: new Date()
     }
-    book.addOrder(o1);
+    var addOrderRes = book.addOrder(o1);
+    assert.isFalse(addOrderRes);
+
     var trades = book.settleBook();
-    var asks= book.asksToArray();
-    var bids = book.bidsToArray();
 
     assert.equal(trades.length, 0);
-    assert.equal(asks[0].price, 2);
+    assert.equal(book.lenAsks(), 0);
+    assert.equal(book.lenBids(), 0);
     done();
 
 
   });
+
+    it('One Market order should be rejected - bid', function(done) {
+      var book = new Book("testBook");
+      var o1 = {
+        quantity: 1,
+        price: 2,
+        side: Order.SIDE.BID,
+        type: OrderTypes.MARKET,
+        owner: "whome",
+        status: Order.STATUS.ACTIVE,
+        time: new Date()
+      }
+      var addOrderRes = book.addOrder(o1);
+      assert.isFalse(addOrderRes);
+
+      var trades = book.settleBook();
+
+      assert.equal(trades.length, 0);
+      assert.equal(book.lenAsks(), 0);
+      assert.equal(book.lenBids(), 0);
+      done();
+
+
+    });
 
   it('Limit & Market order, same quantity ask first', function(done) {
     var book = new Book("testBook");
@@ -342,7 +366,7 @@ describe('Book Matching', function() {
 
     });
 
-      it('Limit & Market order, larger market , sitting asks', function(done) {
+    it('Limit & Market order, larger market , sitting asks', function(done) {
 
     var book = new Book("testBook");
     var o1 = {
@@ -374,18 +398,24 @@ describe('Book Matching', function() {
       status: Order.STATUS.ACTIVE,
       time: new Date()
     }
-    book.addOrder(o1);
-    book.addOrder(o2);
-    book.addOrder(o3);
+    var o1res= book.addOrder(o1);
+    assert.isTrue(o1res);
+    var o2res= book.addOrder(o2);
+    assert.isTrue(o2res);
+    var o3res= book.addOrder(o3);
+    assert.isTrue(o3res);
     var trades = book.settleBook();
     var bids= book.bidsToArray();
+    var asks= book.asksToArray();
 
     assert.equal(trades.length, 2);
     assert.equal(trades[0].childOrders.length, 2);
     assert.equal(trades[1].childOrders.length, 2);
     assert.equal(trades[0].newOrders.length, 1);
-    assert.equal(book.lenBids(), 1);
-    assert.equal(bids[0].quantity, 1);
+
+    // leftover market should be retured as failed
+    assert.equal(trades[1].rejectedOrders[0].quantity, 1);
+    assert.equal(book.lenBids(), 0);
     assert.equal(book.lenAsks(), 0);
     done();
 
@@ -434,9 +464,10 @@ describe('Book Matching', function() {
       assert.equal(trades[0].childOrders.length, 2);
       assert.equal(trades[1].childOrders.length, 2);
       assert.equal(trades[0].newOrders.length, 1);
-      assert.equal(book.lenAsks(), 1);
-      assert.equal(asks[0].quantity, 1);
+      // leftover market should be retured as failed
+      assert.equal(trades[1].rejectedOrders[0].quantity, 1);
       assert.equal(book.lenBids(), 0);
+      assert.equal(book.lenAsks(), 0);
       done();
 
 
