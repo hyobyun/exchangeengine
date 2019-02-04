@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/hyobyun/exchangeengine",
   "dependencies": {
+    "@tyriar/fibonacci-heap": "^2.0.9",
     "async": "^2.6.1",
     "chai": "4.2.0",
     "winston": "^3.2.1"
