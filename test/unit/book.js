@@ -225,6 +225,71 @@ describe('Book Matching', function() {
 
     });
 
+    it('2 limit ask order, same side and price', function(done) {
+        var book = new Book("testBook");
+        var o1 = {
+          quantity: 1,
+          price: 3,
+          side: Order.SIDE.ASK,
+          type: OrderTypes.LIMIT,
+          owner: "whome",
+          status: Order.STATUS.ACTIVE,
+          time: new Date()
+        }
+
+        var o2 = {
+          quantity: 1,
+          price: 3,
+          side: Order.SIDE.ASK,
+          type: OrderTypes.LIMIT,
+          owner: "whome",
+          status: Order.STATUS.ACTIVE,
+          time: new Date()
+        }
+        book.addOrder(o1);
+        book.addOrder(o2);
+        var trades = book.settleBook();
+
+        assert.equal(trades.length, 0);
+        assert.equal(book.lenAsks(), 2);
+        assert.equal(book.lenBids(), 0);
+        done();
+
+
+      });
+
+  it('2 limit bid order, same side and price', function(done) {
+      var book = new Book("testBook");
+      var o1 = {
+        quantity: 1,
+        price: 3,
+        side: Order.SIDE.BID,
+        type: OrderTypes.LIMIT,
+        owner: "whome",
+        status: Order.STATUS.ACTIVE,
+        time: new Date()
+      }
+
+      var o2 = {
+        quantity: 1,
+        price: 3,
+        side: Order.SIDE.BID,
+        type: OrderTypes.LIMIT,
+        owner: "whome",
+        status: Order.STATUS.ACTIVE,
+        time: new Date()
+      }
+      book.addOrder(o1);
+      book.addOrder(o2);
+      var trades = book.settleBook();
+
+      assert.equal(trades.length, 0);
+      assert.equal(book.lenAsks(), 0);
+      assert.equal(book.lenBids(), 2);
+      done();
+
+
+    });
   it('Limit & Market order, same quantity ask first', function(done) {
     var book = new Book("testBook");
     var o1 = {
