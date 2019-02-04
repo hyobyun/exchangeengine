@@ -2,7 +2,6 @@ function Order(quantity, price, side, time, owner, status) {
   this.quantity = quantity;
   this.price = price;
   this.side = side;
-  this.type = type;
   this.owner = owner;
   this.status = status;
   this.time = time;

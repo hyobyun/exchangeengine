@@ -6,6 +6,15 @@ var async = require('async');
 var Book = require('../../Book.js');
 var Order = require('../../Order.js');
 var OrderTypes = require('../../constants/orderTypes.js');
+describe('Order', function() {
+  it('Can instantiate Order', function() {
+
+    var o1 = new Order(1,1,Order.SIDE.BID,"whome",Order.STATUS.ACTIVE,new Date());
+
+    //assert.equal(test.name, bookName);
+  });
+
+});
 
 describe('Book', function() {
 
@@ -17,12 +26,12 @@ describe('Book', function() {
 
   it('Starts with zero length bid book', function() {
     var test = new Book("testBook");
-    assert.equal(test.bids.length, 0);
+    assert.equal(test._bids.size(), 0);
   });
 
   it('Starts with zero length ask book', function() {
     var test = new Book("testBook");
-    assert.equal(test.asks.length, 0);
+    assert.equal(test._asks.size(), 0);
   });
 
 
@@ -30,14 +39,15 @@ describe('Book', function() {
 
   it('bid order sorting is correct (pricing)', function(done) {
     var book = new Book("testBook");
-    var o1 = {
+
+    var o1 =  {
       quantity: 1,
       price: 1,
       side: Order.SIDE.BID,
       owner: "whome",
       status: Order.STATUS.ACTIVE,
       time: new Date()
-    }
+    };
     var o2 = {
       quantity: 1,
       price: 2,
@@ -49,8 +59,9 @@ describe('Book', function() {
 
     book.addOrder(o1);
     book.addOrder(o2);
-    assert.equal(book.bids[0].price, 2);
-    assert.equal(book.bids[1].price, 1);
+    var bids= book.bidsToArray();
+    assert.equal(bids[0].price, 2);
+    assert.equal(bids[1].price, 1);
     done();
 
 
@@ -79,8 +90,9 @@ describe('Book', function() {
     book.addOrder(o1);
     book.addOrder(o2);
 
-    assert.equal(book.asks[0].price, 1);
-    assert.equal(book.asks[1].price, 2);
+    var asks= book.asksToArray();
+    assert.equal(asks[0].price, 1);
+    assert.equal(asks[1].price, 2);
     done();
 
   });
@@ -133,9 +145,10 @@ describe('Book Matching', function() {
     }
     book.addOrder(o1);
     var trades = book.settleBook();
+    var asks= book.asksToArray();
 
     assert.equal(trades.length, 0);
-    assert.equal(book.asks[0].price, 2);
+    assert.equal(asks[0].price, 2);
     done();
 
 
@@ -154,9 +167,11 @@ describe('Book Matching', function() {
     }
     book.addOrder(o1);
     var trades = book.settleBook();
+    var asks= book.asksToArray();
+    var bids = book.bidsToArray();
 
     assert.equal(trades.length, 0);
-    assert.equal(book.bids[0].price, 2);
+    assert.equal(bids[0].price, 2);
     done();
 
 
@@ -176,9 +191,11 @@ describe('Book Matching', function() {
     }
     book.addOrder(o1);
     var trades = book.settleBook();
+    var asks= book.asksToArray();
+    var bids = book.bidsToArray();
 
     assert.equal(trades.length, 0);
-    assert.equal(book.asks[0].price, 2);
+    assert.equal(asks[0].price, 2);
     done();
 
 
@@ -208,10 +225,11 @@ describe('Book Matching', function() {
     book.addOrder(o1);
     book.addOrder(o2);
     var trades = book.settleBook();
+
     assert.equal(trades.length, 1);
     assert.equal(trades[0].childOrders.length, 2);
-    assert.equal(book.asks.length, 0);
-    assert.equal(book.bids.length, 0);
+    assert.equal(book.lenAsks(), 0);
+    assert.equal(book.lenBids(), 0);
     done();
 
 
@@ -244,8 +262,8 @@ describe('Book Matching', function() {
       var trades = book.settleBook();
       assert.equal(trades.length, 1);
       assert.equal(trades[0].childOrders.length, 2);
-      assert.equal(book.asks.length, 0);
-      assert.equal(book.bids.length, 0);
+      assert.equal(book.lenAsks(), 0);
+      assert.equal(book.lenBids(), 0);
       done();
 
 
@@ -276,12 +294,13 @@ describe('Book Matching', function() {
     book.addOrder(o1);
     book.addOrder(o2);
     var trades = book.settleBook();
+    var asks= book.asksToArray();
     assert.equal(trades.length, 1);
     assert.equal(trades[0].childOrders.length, 2);
     assert.equal(trades[0].newOrders.length, 1);
-    assert.equal(book.asks.length, 1);
-    assert.equal(book.asks[0].quantity, 4);
-    assert.equal(book.bids.length, 0);
+    assert.equal(book.lenAsks(), 1);
+    assert.equal(asks[0].quantity, 4);
+    assert.equal(book.lenBids(), 0);
     done();
 
 
@@ -311,12 +330,13 @@ describe('Book Matching', function() {
       book.addOrder(o1);
       book.addOrder(o2);
       var trades = book.settleBook();
+      var bids= book.bidsToArray();
       assert.equal(trades.length, 1);
       assert.equal(trades[0].childOrders.length, 2);
       assert.equal(trades[0].newOrders.length, 1);
-      assert.equal(book.bids.length, 1);
-      assert.equal(book.bids[0].quantity, 4);
-      assert.equal(book.asks.length, 0);
+      assert.equal(book.lenBids(), 1);
+      assert.equal(bids[0].quantity, 4);
+      assert.equal(book.lenAsks(), 0);
       done();
 
 
@@ -358,13 +378,15 @@ describe('Book Matching', function() {
     book.addOrder(o2);
     book.addOrder(o3);
     var trades = book.settleBook();
+    var bids= book.bidsToArray();
+
     assert.equal(trades.length, 2);
     assert.equal(trades[0].childOrders.length, 2);
     assert.equal(trades[1].childOrders.length, 2);
     assert.equal(trades[0].newOrders.length, 1);
-    assert.equal(book.bids.length, 1);
-    assert.equal(book.bids[0].quantity, 1);
-    assert.equal(book.asks.length, 0);
+    assert.equal(book.lenBids(), 1);
+    assert.equal(bids[0].quantity, 1);
+    assert.equal(book.lenAsks(), 0);
     done();
 
 
@@ -406,13 +428,15 @@ describe('Book Matching', function() {
       book.addOrder(o2);
       book.addOrder(o3);
       var trades = book.settleBook();
+      var asks= book.asksToArray();
+
       assert.equal(trades.length, 2);
       assert.equal(trades[0].childOrders.length, 2);
       assert.equal(trades[1].childOrders.length, 2);
       assert.equal(trades[0].newOrders.length, 1);
-      assert.equal(book.asks.length, 1);
-      assert.equal(book.asks[0].quantity, 1);
-      assert.equal(book.bids.length, 0);
+      assert.equal(book.lenAsks(), 1);
+      assert.equal(asks[0].quantity, 1);
+      assert.equal(book.lenBids(), 0);
       done();
 
 
@@ -444,8 +468,8 @@ describe('Book Matching', function() {
     book.addOrder(o2);
     var trades = book.settleBook();
     assert.equal(trades.length, 0);
-    assert.equal(book.bids.length, 1);
-    assert.equal(book.asks.length, 1);
+    assert.equal(book.lenBids(), 1);
+    assert.equal(book.lenAsks(), 1);
     done();
 
 
@@ -476,8 +500,8 @@ describe('Book Matching', function() {
     book.addOrder(o2);
     var trades = book.settleBook();
     assert.equal(trades.length, 0);
-    assert.equal(book.bids.length, 1);
-    assert.equal(book.asks.length, 1);
+    assert.equal(book.lenBids(), 1);
+    assert.equal(book.lenAsks(), 1);
     done();
 
 
@@ -508,8 +532,8 @@ describe('Book Matching', function() {
     book.addOrder(o2);
     var trades = book.settleBook();
     assert.equal(trades.length, 0);
-    assert.equal(book.bids.length, 1);
-    assert.equal(book.asks.length, 1);
+    assert.equal(book.lenBids(), 1);
+    assert.equal(book.lenAsks(), 1);
     done();
 
 
@@ -540,8 +564,8 @@ describe('Book Matching', function() {
     book.addOrder(o2);
     var trades = book.settleBook();
     assert.equal(trades.length, 0);
-    assert.equal(book.bids.length, 1);
-    assert.equal(book.asks.length, 1);
+    assert.equal(book.lenBids(), 1);
+    assert.equal(book.lenAsks(), 1);
     done();
 
 
@@ -575,8 +599,8 @@ describe('Book Matching', function() {
     assert.equal(trades[0].childOrders.length, 2);
     assert.equal(trades[0].fillQuantity, 3);
     assert.equal(trades[0].fillPrice, 5);
-    assert.equal(book.bids.length, 0);
-    assert.equal(book.asks.length, 0);
+    assert.equal(book.lenBids(), 0);
+    assert.equal(book.lenAsks(), 0);
     done();
 
 
@@ -611,8 +635,8 @@ describe('Book Matching', function() {
     assert.equal(trades[0].childOrders.length, 2);
     assert.equal(trades[0].fillQuantity, 3);
     assert.equal(trades[0].fillPrice, 5);
-    assert.equal(book.bids.length, 0);
-    assert.equal(book.asks.length, 0);
+    assert.equal(book.lenBids(), 0);
+    assert.equal(book.lenAsks(), 0);
     done();
 
 
@@ -642,14 +666,15 @@ describe('Book Matching', function() {
     book.addOrder(o1);
     book.addOrder(o2);
     var trades = book.settleBook();
+    var bids= book.bidsToArray();
     assert.equal(trades.length, 1);
     assert.equal(trades[0].newOrders.length, 1);
     assert.equal(trades[0].childOrders.length, 2);
     assert.equal(trades[0].fillQuantity, 3);
     assert.equal(trades[0].fillPrice, 5);
-    assert.equal(book.bids.length, 1);
-    assert.equal(book.bids[0].quantity, 7);
-    assert.equal(book.asks.length, 0);
+    assert.equal(book.lenBids(), 1);
+    assert.equal(bids[0].quantity, 7);
+    assert.equal(book.lenAsks(), 0);
     done();
 
 
@@ -679,15 +704,17 @@ describe('Book Matching', function() {
       book.addOrder(o1);
       book.addOrder(o2);
       var trades = book.settleBook();
+      var asks= book.asksToArray();
+
       assert.equal(trades.length, 1);
       assert.equal(trades[0].newOrders.length, 1);
       assert.equal(trades[0].childOrders.length, 2);
       assert.equal(trades[0].fillQuantity, 3);
       assert.equal(trades[0].fillPrice, 5);
 
-      assert.equal(book.asks.length, 1);
-      assert.equal(book.asks[0].quantity, 7);
-      assert.equal(book.bids.length, 0);
+      assert.equal(book.lenAsks(), 1);
+      assert.equal(asks[0].quantity, 7);
+      assert.equal(book.lenBids(), 0);
       done();
 
 
