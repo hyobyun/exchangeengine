@@ -1,9 +1,15 @@
+// config
+var seconds=60
+var samplePeriod=10000;
+var targetBookSize=500;
+//
+
 var Book = require('./Book.js');
 var Order = require('./Order.js');
 var OrderTypes = require('./constants/orderTypes.js');
 var t = new Date();
 var start = new Date();
-t.setSeconds(t.getSeconds() + 60);
+t.setSeconds(t.getSeconds() + seconds);
 
 //Generate random numbers
 for (var i=1e6, lookupTable=[]; i--;) {
@@ -14,7 +20,6 @@ function lookupRand() {
 }
 
 
-var samplePeriod=100000;
 
 var count=0;
 var trades=0;
@@ -24,11 +29,12 @@ while( Date.now() < t) {
   if(count%samplePeriod==0) {
     outputStats()
   }
+  var totalBookSize=book.lenAsks()+book.lenBids();
   var o1 = {
     quantity: Math.floor(lookupRand()*100),
     price: lookupRand()*100,
     side: (lookupRand() >0.5 ? Order.SIDE.BID : Order.SIDE.ASK) ,
-    type: (lookupRand() >0.5 ? OrderTypes.LIMIT :OrderTypes.MARKET),
+    type: (totalBookSize<targetBookSize ? OrderTypes.LIMIT :OrderTypes.MARKET),
     owner: "whome",
     status: Order.STATUS.ACTIVE,
     time: Date.now()
