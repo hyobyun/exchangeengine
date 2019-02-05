@@ -10,7 +10,7 @@ A general purpose exchange engine written in Node.js. Minimum functionality has 
 - FIFO Order Matching
 
 ## Benchmarking
-The benchmarks below were done with a MPBr 2.3 GHz Intel Core with a randomized order adding and execution. See benchmark.js for more details. As expected, performance depends on how many limit orders are sitting in the books. I plan on publishing a more formal benchmark report later.
+The benchmarks below were done with a MPBr 2.3 GHz Intel Core with a randomized order adding and execution. See benchmark.js for more details. As expected, performance depends on how many limit orders are sitting in the books. I plan on publishing a more formal benchmark report later. A Transaction is a new limit or market order added to the book that may result in a trade.
 
 | Book Size | Transactions/Second |
 |-----------|---------------------|
