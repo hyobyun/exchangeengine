@@ -19,6 +19,8 @@ The benchmarks below were done with a MPBr 2.3 GHz Intel Core with a randomized 
 | 1,000     | 26,894              |
 | 10,000    | 2,171               |
 
+### Matching engine
+The current matching engine is currently based on a priority queue (fibonacci heap). I will be experimenting with different options in the future, perhaps even allowing the backing engine to be configurable.
 
 ## Dependencies
 * Node.js + npm
